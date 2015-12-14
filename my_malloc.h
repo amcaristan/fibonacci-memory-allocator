@@ -36,7 +36,7 @@ typedef struct Header {
     unsigned int block_count; /* Number of blocks this Header is responsible for, 
                                  multiplied w/ basic_block_size to find size of 
                                  block in bytes. Should be a fibonacci number */
-    char is_fr; /* 'Y'es or 'N'o */
+    char is_free; /* 'Y'es or 'N'o */
     char child; /* 'L'eft or 'R'ight */
     char inherit; /* 'inherit' holds left child's parent's 'child' bit, and right 
                       child's parent's 'inherit' bit */
