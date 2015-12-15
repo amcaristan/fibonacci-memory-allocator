@@ -25,7 +25,11 @@ int main(int argc, const char * argv[]) {
     
     release_allocator();*/
     
-    /* Self Test */
+    printf( "uint_fast32_t Size: %lu\n", sizeof(uint_fast16_t) );
+    printf( "Header Size: %lu\n", sizeof(Header) );
+    printf( "Efficient_Header Size: %lu\n", sizeof(Efficient_Header) );
+
+    /* Self Test *
     init_allocator(32, 95000);
     
     show_free_list();
@@ -58,7 +62,7 @@ int main(int argc, const char * argv[]) {
     printf("\n%d", my_free(allocation2));
     show_free_list();
     
-    release_allocator();
+    release_allocator();/**/
     
     return 0;
 }

@@ -1,4 +1,4 @@
-/***********************************************************************************
+/********************************************************************************************************
  File: my_malloc.h
  
  Authors: Professor R. Bettati & Adrien Mombo-Caristan
@@ -8,27 +8,27 @@
  
  This file contains the declarations for the my_allocator module as well as List 
  and Header structures for doubly-linked list implementation.
-***********************************************************************************/
+*********************************************************************************************************/
 
 
-/*--------------------------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------*/
 /* DEFINES */
-/*--------------------------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------*/
 
 #ifndef __Memory_Allocator__C___my_malloc__
 #define __Memory_Allocator__C___my_malloc__
 #define HEADER_IDENT 1138
 
-/*--------------------------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------*/
 /* INCLUDES */
-/*--------------------------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------*/
 
 #include <stdlib.h>
 #include <stdio.h>
 
-/*--------------------------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------*/
 /* DATA STRUCTURES */
-/*--------------------------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------*/
 
 /* Header for storing memory block information */
 typedef struct Header {
@@ -44,9 +44,25 @@ typedef struct Header {
     struct Header *next; /* pointer to next memory block */
 } Header;
 
-/*--------------------------------------------------------------------------------*/
+/* Header for storing memory (buddy) block information */
+typedef struct Efficient_Header {
+    /* 'header' is a bit-mask that will be >= 32 bits and will hold the following (info:#bits):
+        (header_ident:16 | free:1 | child:1 | inherit:1 | block_count:13+) */
+    
+    /* 'header_ident' validates a 'header' (const, set to a random number in call to init_allocator()) */
+    /* 'block_count' holds #blocks this 'header' is responsible for. Should be a fibonacci number. 
+        Multiply by basic_block_size to find the size of this header's block in bytes. */
+    /* 'free' holds information on the availability of the block for allocation: yes == 1 , no == 0 */
+    /* 'child' holds information on whether this header points to a left child (1) or right child (0) */
+    /* 'inherit' holds left child's parent's 'child' bit, or the right child's parent's 'inherit' bit */
+    uint_fast32_t header;
+    struct Efficient_Header *prev; /* pointer to previous memory block in free_store */
+    struct Efficient_Header *next; /* pointer to next memory block in free_store */
+} Efficient_Header;
+
+/*------------------------------------------------------------------------------------------------------*/
 /* MODULE MY_MALLOC */
-/*--------------------------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------*/
 
 
 typedef void* Addr;
